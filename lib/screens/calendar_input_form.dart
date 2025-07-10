@@ -12,10 +12,10 @@ class CalendarInputForm extends StatefulWidget {
 class _CalendarInputFormState extends State<CalendarInputForm> {
   final _formKey = GlobalKey<FormState>();
 
-  int _weekStartsOn = 0; // hidden from UI
+  int _weekStartsOn = 0;
   int _monthStartsOn = 0;
   int _daysInMonth = 31;
-  String _layoutType = 'horizontal'; // default selected
+  String _layoutType = 'horizontal';
 
   final List<String> _weekdays = [
     'Sunday',
@@ -76,7 +76,6 @@ class _CalendarInputFormState extends State<CalendarInputForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Layout Selector
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -117,8 +116,6 @@ class _CalendarInputFormState extends State<CalendarInputForm> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Month Starts On
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -160,7 +157,6 @@ class _CalendarInputFormState extends State<CalendarInputForm> {
                 ),
                 const SizedBox(height: 16),
 
-                // Days in Month
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -209,7 +205,6 @@ class _CalendarInputFormState extends State<CalendarInputForm> {
                 ),
                 const SizedBox(height: 30),
 
-                // Generate Button
                 ElevatedButton(
                   onPressed: _generateCalendar,
                   style: ElevatedButton.styleFrom(

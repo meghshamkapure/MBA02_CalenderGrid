@@ -29,56 +29,60 @@ class _VerticalDatedMonthGridState extends State<VerticalDatedMonthGrid> {
     'Sat',
   ];
 
-  // Build calendar matrix using single loop from 0 to 41
   List<List<String>> _buildVerticalGrid() {
-    // Initialize 6 columns (1 header + 5 week columns)
     List<List<String>> columns = List.generate(6, (_) => List.filled(7, ''));
 
     int currentDate = 1;
     bool dateStarted = false;
+    bool wrapAround = false;
+    int wrapStartIndex = 7;
 
-    // Single loop from 0 to 41 (42 cells total, but we only use 6 columns)
-    for (int i = 0; i < 42; i++) {
-      int col = i ~/ 7; // Column index (0-5)
-      int row = i % 7; // Row index (0-6)
+    for (int i = 0; i < 84; i++) {
+      int col, row;
 
-      // Skip if we exceed our 6 columns
-      if (col >= 6) break;
+      if (!wrapAround) {
+        col = i ~/ 7;
+        row = i % 7;
+
+        if (col >= 6) {
+          if (currentDate <= widget.daysInMonth) {
+            wrapAround = true;
+            i = wrapStartIndex - 1;
+            continue;
+          } else {
+            break;
+          }
+        }
+      } else {
+        int adjustedIndex = i - wrapStartIndex;
+        if (adjustedIndex >= 35) break;
+
+        col = (adjustedIndex ~/ 7) + 1;
+        row = adjustedIndex % 7;
+      }
 
       if (col == 0) {
-        // Column 1: Print weekdays
         columns[col][row] = weekdays[(widget.weekStartsOn + row) % 7];
-      } else if (col >= 1 && col <= 4) {
-        // Columns 2-5: Print dates only if month has started
-        if (!dateStarted && row == widget.monthStartsOn) {
-          dateStarted = true;
-        }
+      } else {
+        if (wrapAround) {
+          if (columns[col][row] == '' && currentDate <= widget.daysInMonth) {
+            columns[col][row] = currentDate.toString();
+            currentDate++;
+          }
+        } else {
+          if (!dateStarted && row == widget.monthStartsOn) {
+            dateStarted = true;
+          }
 
-        if (dateStarted && currentDate <= widget.daysInMonth) {
-          columns[col][row] = currentDate.toString();
-          currentDate++;
-        }
-      } else if (col == 5) {
-        // Column 6: Fill remaining dates if any
-        if (currentDate <= widget.daysInMonth) {
-          columns[col][row] = currentDate.toString();
-          currentDate++;
+          if (dateStarted && currentDate <= widget.daysInMonth) {
+            columns[col][row] = currentDate.toString();
+            currentDate++;
+          }
         }
       }
-    }
 
-    // If we still have dates left, fill empty cells from the beginning
-    if (currentDate <= widget.daysInMonth) {
-      for (int i = 0; i < 35 && currentDate <= widget.daysInMonth; i++) {
-        // 35 = 5 weeks × 7 days
-        int col = (i ~/ 7) + 1; // Skip header column
-        int row = i % 7;
-
-        // Only fill if cell is empty
-        if (col < 6 && columns[col][row] == '') {
-          columns[col][row] = currentDate.toString();
-          currentDate++;
-        }
+      if (currentDate > widget.daysInMonth) {
+        break;
       }
     }
 
@@ -89,8 +93,7 @@ class _VerticalDatedMonthGridState extends State<VerticalDatedMonthGrid> {
   @override
   Widget build(BuildContext context) {
     final List<List<String>> verticalGrid = _buildVerticalGrid();
-    final int numColumns =
-        verticalGrid.length; // 7 columns (1 header + 6 week columns)
+    final int numColumns = verticalGrid.length;
 
     return Scaffold(
       appBar: AppBar(
