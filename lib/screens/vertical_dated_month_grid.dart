@@ -86,7 +86,6 @@ class _VerticalDatedMonthGridState extends State<VerticalDatedMonthGrid> {
       }
     }
 
-    print(columns);
     return columns;
   }
 

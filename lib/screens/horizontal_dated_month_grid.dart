@@ -38,7 +38,7 @@ class _HorizontalDatedMonthGridState extends State<HorizontalDatedMonthGrid> {
     int dateNumber = 1;
     int i = 0;
 
-    while (dateNumber <= widget.daysInMonth) {
+    for (; dateNumber <= widget.daysInMonth;) {
       if (i < 7) {
         i++;
         continue;
@@ -70,7 +70,6 @@ class _HorizontalDatedMonthGridState extends State<HorizontalDatedMonthGrid> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            // Calendar grid
             Expanded(
               child: Center(
                 child: GridView.count(
