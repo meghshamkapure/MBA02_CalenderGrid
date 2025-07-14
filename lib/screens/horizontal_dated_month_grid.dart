@@ -20,43 +20,49 @@ class HorizontalDatedMonthGrid extends StatefulWidget {
 }
 
 class _HorizontalDatedMonthGridState extends State<HorizontalDatedMonthGrid> {
-  String getCellContent(int index) {
-    if (index < 7) {
-      const List<String> weekdays = [
-        'Sun',
-        'Mon',
-        'Tue',
-        'Wed',
-        'Thu',
-        'Fri',
-        'Sat',
-      ];
-      return weekdays[(widget.weekStartsOn + index) % 7];
-    }
+  final List<String> weekdays = ['Sun',  'Mon',  'Tue',  'Wed',  'Thu',  'Fri',  'Sat',];
 
+  late List<String> monthGrid;
+
+  @override
+  void initState() {
+    super.initState();
+    monthGrid = getMonthList(widget.monthStartsOn, widget.daysInMonth);
+  }
+
+  List<String> getMonthList(int monthStartsOn, int daysInMonth) {
+    const List<String> weekdays = [
+      'Sun',
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+    ];
+    int date = 1;
     List<String> grid = List<String>.filled(42, '');
-    int dateNumber = 1;
-    int i = 0;
-
-    for (; dateNumber <= widget.daysInMonth;) {
-      if (i < 7) {
-        i++;
-        continue;
-      } else if (i >= 7 + widget.monthStartsOn || dateNumber > 1) {
-        if (dateNumber <= widget.daysInMonth) {
-          grid[i] = dateNumber.toString();
-          dateNumber++;
-        }
+    monthStartsOn = (monthStartsOn) % 7;
+    for (int i = 0; i < grid.length; ) {
+      //week fill
+      if (i <= 6) {
+        grid[i] = weekdays[i % 7];
       }
-
+      // before month starts
+      else if (i > 6 && monthStartsOn-- > 0) {
+        grid[i] = '';
+      }
+      // filling date till end of grid
+      else if (i > 6 && date <= daysInMonth) {
+        grid[i] = (date++).toString();
+      }
       i++;
-
-      if (i > 41 && dateNumber <= widget.daysInMonth) {
-        i = 7;
+      if ( date <= daysInMonth && i == grid.length ) {
+        i = weekdays.length ;
       }
     }
-
-    return grid[index];
+    print(grid);
+    return grid;
   }
 
   @override
@@ -71,33 +77,32 @@ class _HorizontalDatedMonthGridState extends State<HorizontalDatedMonthGrid> {
         child: Column(
           children: [
             Expanded(
-              child: Center(
-                child: GridView.count(
-                  crossAxisCount: 7,
-                  children: List.generate(42, (index) {
-                    String text = getCellContent(index);
-                    final isHeader = index < 7;
-                    return Container(
-                      margin: const EdgeInsets.all(1),
-                      decoration: BoxDecoration(
-                        color: isHeader
-                            ? Colors.deepPurple[200]
-                            : Colors.deepPurple[50],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Center(
-                        child: Text(
-                          text,
-                          style: TextStyle(
-                            fontWeight: isHeader
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
+              child: GridView.count(
+                crossAxisCount: 7,
+                childAspectRatio: 1.5,
+                children: List.generate(42, (index) {
+                  final isHeader = index < 7;
+                  final text = monthGrid[index];
+                  return Container(
+                    margin: const EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                      color: isHeader
+                          ? Colors.deepPurple[200]
+                          : Colors.deepPurple[50],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Center(
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          fontWeight: isHeader
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                }),
               ),
             ),
           ],

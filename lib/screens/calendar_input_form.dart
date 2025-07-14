@@ -12,7 +12,7 @@ class CalendarInputForm extends StatefulWidget {
 class _CalendarInputFormState extends State<CalendarInputForm> {
   final _formKey = GlobalKey<FormState>();
 
-  int _weekStartsOn = 0;
+  final int _weekStartsOn = 0;
   int _monthStartsOn = 0;
   int _daysInMonth = 31;
   String _layoutType = 'horizontal';
