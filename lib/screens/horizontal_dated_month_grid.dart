@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mba02_calender_layout_application/utility/month_grid_generator.dart';
 
 class HorizontalDatedMonthGrid extends StatefulWidget {
   final String title;
@@ -27,42 +28,7 @@ class _HorizontalDatedMonthGridState extends State<HorizontalDatedMonthGrid> {
   @override
   void initState() {
     super.initState();
-    monthGrid = getMonthList(widget.monthStartsOn, widget.daysInMonth);
-  }
-
-  List<String> getMonthList(int monthStartsOn, int daysInMonth) {
-    const List<String> weekdays = [
-      'Sun',
-      'Mon',
-      'Tue',
-      'Wed',
-      'Thu',
-      'Fri',
-      'Sat',
-    ];
-    int date = 1;
-    List<String> grid = List<String>.filled(42, '');
-    monthStartsOn = (monthStartsOn) % 7;
-    for (int i = 0; i < grid.length; ) {
-      //week fill
-      if (i <= 6) {
-        grid[i] = weekdays[i % 7];
-      }
-      // before month starts
-      else if (i > 6 && monthStartsOn-- > 0) {
-        grid[i] = '';
-      }
-      // filling date till end of grid
-      else if (i > 6 && date <= daysInMonth) {
-        grid[i] = (date++).toString();
-      }
-      i++;
-      if ( date <= daysInMonth && i == grid.length ) {
-        i = weekdays.length ;
-      }
-    }
-    print(grid);
-    return grid;
+    monthGrid = generateMonthGrid(widget.monthStartsOn, widget.daysInMonth);
   }
 
   @override
