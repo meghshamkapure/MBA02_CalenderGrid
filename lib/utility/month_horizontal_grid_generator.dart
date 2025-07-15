@@ -1,5 +1,5 @@
 List<String> generateHorizontalMonthGrid(int monthStartsOn, int daysInMonth) {
-  const List<String> weekdays = [
+  const List<String> weekdayLabels = [
     'Sun',
     'Mon',
     'Tue',
@@ -9,31 +9,33 @@ List<String> generateHorizontalMonthGrid(int monthStartsOn, int daysInMonth) {
     'Sat'
   ];
 
-  List<String> grid = List<String>.filled(42, '');
+  List<String> calendarGrid = List<String>.filled(42, '');
 
-  int date = 1;
-  monthStartsOn = monthStartsOn % 7;
+  int currentDate = 1;
+  int remainingEmptyCells = monthStartsOn % 7;
 
-  for (int i = 0; i < grid.length;) {
-    if (i <= 6) {
-      grid[i] = weekdays[i % 7];
+  for (int gridIndex = 0; gridIndex < calendarGrid.length;) {
+    // Fill first row with weekday labels
+    if (gridIndex <= 6) {
+      calendarGrid[gridIndex] = weekdayLabels[gridIndex % 7];
     }
-    // Empty cells before the month starts
-    else if (i > 6 && monthStartsOn-- > 0) {
-      grid[i] = '';
+    // Fill empty cells before the month starts
+    else if (gridIndex > 6 && remainingEmptyCells-- > 0) {
+      calendarGrid[gridIndex] = '';
     }
-    // Actual days of the month
-    else if (i > 6 && date <= daysInMonth) {
-      grid[i] = (date++).toString();
+    // Fill actual days of the month
+    else if (gridIndex > 6 && currentDate <= daysInMonth) {
+      calendarGrid[gridIndex] = (currentDate++).toString();
     }
 
-    i++;
+    gridIndex++;
 
-    // Restart from 7 if dates are left and grid is filled
-    if (date <= daysInMonth && i == grid.length) {
-      i = weekdays.length;
+    // Restart from position 7 if dates are left and grid is filled
+    if (currentDate <= daysInMonth && gridIndex == calendarGrid.length) {
+      gridIndex = weekdayLabels.length;
     }
   }
-  print ("Horizontal Month Grid =>"+ grid.toString());
-  return grid;
+
+  print("Horizontal Month Grid => $calendarGrid");
+  return calendarGrid;
 }
