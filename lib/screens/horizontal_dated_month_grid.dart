@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mba02_calender_layout_application/utility/month_grid_generator.dart';
+import '../utility/month_horizontal_grid_generator.dart';
 
 class HorizontalDatedMonthGrid extends StatefulWidget {
   final String title;
@@ -28,7 +28,7 @@ class _HorizontalDatedMonthGridState extends State<HorizontalDatedMonthGrid> {
   @override
   void initState() {
     super.initState();
-    monthGrid = generateMonthGrid(widget.monthStartsOn, widget.daysInMonth);
+    monthGrid = generateHorizontalMonthGrid(widget.monthStartsOn, widget.daysInMonth);
   }
 
   @override

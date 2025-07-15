@@ -1,11 +1,10 @@
-List<String> generateMonthGrid(int monthStartsOn, int daysInMonth) {
+List<String> generateHorizontalMonthGrid(int monthStartsOn, int daysInMonth) {
   const List<String> weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   int date = 1;
   List<String> grid = List<String>.filled(42, '');
   monthStartsOn = monthStartsOn % 7;
 
   for (int i = 0; i < grid.length;) {
-    // Weekday header row
     if (i <= 6) {
       grid[i] = weekdays[i % 7];
     }
